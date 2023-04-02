@@ -65,9 +65,8 @@ Plug 'airblade/vim-gitgutter'
 """ sudo dpkg -i ripgrep_12.1.1_amd64.deb
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-" Ranger
+
 Plug 'rbgrouleff/bclose.vim'
-Plug 'francoiscabrol/ranger.vim'
 
 "" wildfire + surround
 " With Wildfire you can quickly select the closest text object among a group of candidates.
@@ -373,7 +372,7 @@ let g:mkdp_theme = 'dark'
 
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved
-set signcolumn=number
+set signcolumn=yes
 
 " Use tab for trigger completion with characters ahead and navigate
 " NOTE: There's always complete item selected by default, you may want to enable
@@ -489,6 +488,17 @@ endif
 nmap <silent> <C-s> <Plug>(coc-range-select)
 xmap <silent> <C-s> <Plug>(coc-range-select)
 
+function! s:read_template_into_buffer(template)
+	" has to be a function to avoid the extra space fzf#run insers otherwise
+	execute '0r ~/.config/nvim/sample_clang_format/'.a:template
+endfunction
+command! -bang -nargs=* LoadClangFormatTemplate call fzf#run({
+			\   'source': 'ls -1 ~/.config/nvim/sample_clang_format',
+			\   'down': 20,
+			\   'sink': function('<sid>read_template_into_buffer')
+			\ })
+noremap <leader>ff :tabe .clang-format<CR>:LoadClangFormatTemplate<CR>
+
 " Add `:Format` command to format current buffer
 command! -nargs=0 Format :call CocActionAsync('format')
 
@@ -555,6 +565,11 @@ let g:vista#renderer#icons = {
 \   "function": "\uf794",
 \   "variable": "\uf71b",
 \  }
+
+" To enable fzf's preview window set g:vista_fzf_preview.
+" The elements of g:vista_fzf_preview will be passed as arguments to fzf#vim#with_preview()
+" For example:
+let g:vista_fzf_preview = ['right:50%']
 
 " }}}
 " }}}
@@ -878,7 +893,7 @@ nmap th :-tabnext<CR>
 " open a new tab
 nmap tn :tabnew<CR>
 " fuzzy search in a new tab
-nmap <LEADER>f :FZF!<CR>
+nmap <LEADER>f :FZF!<space>
 "}}}
 
 " Buffer Management {{{

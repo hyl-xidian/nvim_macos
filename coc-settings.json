@@ -39,7 +39,7 @@
     "diagnostic.virtualTextPrefix": " ❯❯❯ ",
     "diagnostic.virtualText": false,
     "codeLens.enable": true,
-    "coc.preferences.formatOnSave": true,
+    "coc.preferences.formatOnSave": false,
     "explorer.width": 38,
     "explorer.quitOnOpen": true,
     "explorer.sources": [
